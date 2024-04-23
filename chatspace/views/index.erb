@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shared Textboard</title>
+</head>
+<body>
+    <h1>Shared Textboard</h1>
+    <form action="/message" method="post">
+        <input type="text" name="message" placeholder="Enter your message...">
+        <button type="submit">Post</button>
+    </form>
+    <ul>
+        <% messages.each do |message| %>
+            <li><%= message %></li>
+        <% end %>
+    </ul>
+</body>
+</html>
