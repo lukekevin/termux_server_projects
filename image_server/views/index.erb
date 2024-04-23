@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Photo Server</title>
+  <style>
+    /* Style for the container div */
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px; /* Gap between images */
+    }
+    /* Style for individual images */
+    div img {
+      max-width: calc(20% - 10px); /* 20% width with gap */
+      max-height: auto;
+      width: auto;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Photo Server</h1>
+  
+  <div>
+    <% Dir.glob(File.join(PHOTOS_DIRECTORY, '*.{jpg,jpeg,png,gif}')).each do |photo_path| %>
+      <% photo_name = File.basename(photo_path) %>
+      <img src="/photos/<%= photo_name %>" alt="<%= photo_name %>">
+    <% end %>
+  </div>
+</body>
+</html>
