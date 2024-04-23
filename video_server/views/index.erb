@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-gap: 20px;
+        }
+        li {
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Library</h1>
+    <ul>
+        <% @videos.each do |video| %>
+            <li>
+                <video width="320" height="240" controls>
+                    <source src="/<%= video %>" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p><%= video %></p>
+            </li>
+        <% end %>
+    </ul>
+</body>
+</html>
