@@ -1,17 +1,21 @@
 from flask import Flask, jsonify
 import requests
 import subprocess
+import json
 
 app = Flask(__name__)
 
 def get_current_time():
-    try:
-        # Execute the 'date' command using subprocess and capture its output
-        time_output = subprocess.check_output(['date']).decode().strip()
-        return time_output
-    except subprocess.CalledProcessError as e:
-        print("Error:", e)
-        return None
+    time_output = subprocess.check_output(['date']).decode().strip()
+    return time_output
+    
+
+def battery_status():
+    batt_op = subprocess.check_output(['termux-battery-status'], universal_newlines=True)
+        # Parse the output as JSON
+    batt_op_json = json.loads(batt_op)
+    return batt_op_json
+    
 
 def get_location_from_ip():
     # Using a free IP-based geolocation service
@@ -22,22 +26,25 @@ def get_location_from_ip():
     region = data.get('region', '')
     if len(location) == 2:
         latitude, longitude = location
+
         return {'latitude': float(latitude), 'longitude': float(longitude), 'region': region}
+        print('\n')
     else:
         return None
 
 @app.route('/get_location')
 def get_location():
-    # Get location from the geolocation-db.com API
+    
+    current_time = get_current_time()                 
+    batt_status = battery_status()
     location_data = get_location_from_ip()
     if location_data:
-        # Get current time
-        current_time = get_current_time()
-        if current_time:
-            location_data['current_time'] = current_time
-        return jsonify(location_data)
-    else:
-        return jsonify({'error': 'Failed to retrieve location'})
+        return jsonify( location_data, {'health': batt_status, 'time': current_time})
+
+    
+ #   else:
+#        location_data["Health"]=batt_status                        location_data["Time"]=current_time
+  #                                                                 return jsonify(location_data)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4567) 
+    app.run(host='0.0.0.0', port=4567)  
